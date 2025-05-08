@@ -1,0 +1,19 @@
+---
+# roles/ad_join/tasks/main.yml
+- name: Join Active Directory domain
+  shell: |
+    echo '{{ ad_user_password }}' | realm join --user={{ ad_user }} {{ ad_domain }}
+  args:
+    creates: /etc/sssd/sssd.conf
+
+- name: Ensure SSSD is enabled
+  systemd:
+    name: sssd
+    enabled: true
+    state: started
+
+- name: Enable oddjobd for home directory creation
+  systemd:
+    name: oddjobd
+    enabled: true
+    state: started

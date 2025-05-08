@@ -1,0 +1,16 @@
+---
+# tasks file for veeam_agent on RHEL 9
+
+- name: Add Veeam repository
+  ansible.builtin.yum_repository:
+    name: veeam
+    description: "Veeam Backup Repository"
+    baseurl: https://repository.veeam.com/backup/linux/agent/rhel/public/
+    gpgcheck: yes
+    gpgkey: https://repository.veeam.com/keys/veeam.gpg
+    enabled: yes
+
+- name: Install Veeam Agent
+  ansible.builtin.yum:
+    name: veeam
+    state: present
