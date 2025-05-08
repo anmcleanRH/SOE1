@@ -1,0 +1,24 @@
+---
+# roles/librenms_agent/tasks/main.yml
+- name: Install net-snmp
+  dnf:
+    name: net-snmp
+    state: present
+
+- name: Configure SNMP for LibreNMS
+  copy:
+    dest: /etc/snmp/snmpd.conf
+    content: |
+      com2sec readonly  default         public
+      group MyROGroup v2c         readonly
+      view all    included  .1                               80
+      access MyROGroup ""      any       noauth    exact  all    none   none
+      sysLocation Data Center
+      sysContact  admin@example.com
+    mode: 0644
+
+- name: Enable and start snmpd
+  systemd:
+    name: snmpd
+    enabled: true
+    state: started

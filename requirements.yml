@@ -1,0 +1,9 @@
+---
+- src: geerlingguy.firewall
+  version: "3.1.0"
+
+- src: geerlingguy.security
+  version: "2.0.0"
+
+- src: azure.azure_preview_modules
+  version: "2.12.0"

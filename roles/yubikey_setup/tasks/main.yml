@@ -1,0 +1,31 @@
+---
+# roles/yubikey_setup/tasks/main.yml
+- name: Install YubiKey PAM U2F support
+  dnf:
+    name: pam-u2f
+    state: present
+
+- name: Create YubiKey mappings directory
+  file:
+    path: /etc/Yubico
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Add sample YubiKey mapping for users
+  copy:
+    dest: /etc/Yubico/u2f_keys
+    content: |
+      apps_qa:example_key_handle
+      sysadmin:example_key_handle
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Configure PAM for YubiKey U2F
+  lineinfile:
+    path: /etc/pam.d/system-auth
+    insertafter: "auth        required      pam_env.so"
+    line: "auth       required       pam_u2f.so origin=file://hostname appid=file://hostname"
+    state: present

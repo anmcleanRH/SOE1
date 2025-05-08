@@ -1,0 +1,29 @@
+---
+# roles/azure_agent/tasks/main.yml
+- name: Add Azure repo for Linux agent
+  get_url:
+    url: "{{ azure_repo_url }}"
+    dest: /etc/yum.repos.d/microsoft.repo
+
+- name: Install WALinuxAgent
+  dnf:
+    name: WALinuxAgent
+    state: present
+
+- name: Enable WALinuxAgent
+  systemd:
+    name: waagent
+    enabled: true
+    state: started
+
+- name: Install Azure Backup agent
+  dnf:
+    name: azure-linux-backup
+    state: present
+
+- name: Enable Azure Backup agent
+  systemd:
+    name: azure-linux-backup
+    enabled: true
+    state: started
+

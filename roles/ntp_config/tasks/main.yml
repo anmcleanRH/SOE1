@@ -1,0 +1,14 @@
+---
+# roles/ntp_config/tasks/main.yml
+- name: Ensure chrony is configured with internal NTP
+  lineinfile:
+    path: /etc/chrony.conf
+    regexp: "^server"
+    line: "server {{ ntp_server }} iburst"
+    state: present
+
+- name: Enable and restart chronyd
+  systemd:
+    name: chronyd
+    enabled: true
+    state: restarted

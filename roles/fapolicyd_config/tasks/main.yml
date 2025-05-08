@@ -1,0 +1,8 @@
+---
+# roles/fapolicyd_config/tasks/main.yml
+- name: Add fapolicyd ingress rule for /dvt/bin
+  lineinfile:
+    path: /etc/fapolicyd/fapolicyd.rules
+    line: "allow perm=any uid=apps_qa : dir=/dvt/bin/"
+    create: yes
+  notify: Restart fapolicyd
